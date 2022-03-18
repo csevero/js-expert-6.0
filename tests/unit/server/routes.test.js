@@ -38,7 +38,7 @@ describe('#Routes - test suite for api response', () => {
 
     const mockFileStream = TestUtil.generateReadableStream(['data']);
 
-    //we use the jest.spyOn to monitoring when our test try to access some file or some function, with this we can create a mocked value to store a 'test' data to our test and dont depending of any file system
+    //we use the jest.spyOn to monitoring when our test try to access some file or some function, with this we can create a mocked value to store a 'test' data to our test and dont depending of return of that file
     //here we are monitoring the class Controller and the getFileStream method, when it is called we use the mockResolvedValue to mock a value an pass a stream mocked created above
     jest
       .spyOn(Controller.prototype, Controller.prototype.getFileStream.name)
@@ -62,7 +62,6 @@ describe('#Routes - test suite for api response', () => {
 
     const mockFileStream = TestUtil.generateReadableStream(['data']);
 
-    //for some reason just the first test that use the Controller.prototype.getFileStream.name works, so I need to past the name of function directly here to works
     jest
       .spyOn(Controller.prototype, 'getFileStream')
       .mockResolvedValue({ stream: mockFileStream });
