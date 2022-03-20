@@ -6,6 +6,7 @@ const {
   pages: { homeHTML, controllerHTML },
   constants: { CONTENT_TYPE },
 } = config;
+import { once } from 'events';
 
 const controller = new Controller();
 
@@ -34,6 +35,29 @@ async function routes(request, response) {
     // the default response type is text/html
     // response.writeHead(200, {"Content-Type": "text/html"})
     return stream.pipe(response);
+  }
+
+  //for some reason when the browser request a file of the server, the browser store the file in cache, it's not make sense to us, so we use some like ?id=123 in front of our url and the browser doesn't be store our file
+  if (method === 'GET' && url.includes('/stream')) {
+    const { stream, onClose } = controller.createClientStream();
+
+    //when the browser is closed or lost connection with backend we removing the stream
+    request.once('close', onClose);
+
+    response.writeHead(200, {
+      'Content-Type': 'audio/mpeg',
+      'Accept-Rages': 'bytes',
+    });
+
+    return stream.pipe(response);
+  }
+
+  if (method === 'POST' && url === '/controller') {
+    const data = await once(request, 'data');
+    const item = JSON.parse(data);
+    const result = await controller.handleCommand(item);
+
+    return response.end(JSON.stringify(result));
   }
 
   //files

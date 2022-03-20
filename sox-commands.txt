@@ -1,0 +1,63 @@
+Bit rate -> Bit rate that can be reproduced by second
+  It's better that all audios have the same Bit rate value
+
+/*
+Get audio information
+*/
+
+sox \
+--i \
+"audio/songs/conversation.mp3"
+
+sox \
+--i \
+"audio/fx/Boo! Sound Effect (128 kbps).mp3"
+
+
+/* Converting song bit rate using the sox
+  -v volume (for some reason the sox turn down the volume of sound, so we set 0.99)
+  -t (type)
+  path to the file
+  -r sample rate 
+  -t type of the out file
+  path and name of the out file */
+
+sox \
+-v 0.99 \
+-t mp3 \
+"audio/fx/Applause Sound Effect HD No Copyright (128 kbps).mp3" \
+-r 48000 \
+-t mp3 \
+"output.mp3"
+
+/*
+Get the file bit rate
+*/
+
+sox \
+--i \
+-B \
+"audio/fx/Boo! Sound Effect (128 kbps).mp3"
+
+/*
+join two sounds
+
+-t type of the first sound
+-v volume of the first sound
+-m property to merge two audios, you need to pass the path file
+-t type of the second sound
+-v volume of the second sound
+path file
+-t type of the out file
+path and name of the out file
+*/
+
+sox \
+-t mp3 \
+-v 0.99 \
+-m "audio/songs/conversation.mp3" \
+-t mp3 \
+-v 0.99 \
+"audio/fx/Fart - Gaming Sound Effect (HD) (128 kbps).mp3" \
+-t mp3 \
+"output.mp3"
